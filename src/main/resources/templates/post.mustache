@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>{{{metadata.title}}}</title>
+<link rel="stylesheet" href="/assets/blog-2.css">
+<link href="/feed.rss" rel="alternate" type="application/rss+xml" title="Ralph's Blog: RSS Feed" />
+<link href="/feed.atom" rel="alternate" type="application/atom+xml" title="Ralph's Blog: Atom Feed" />
+</head>
+<body>
+
+  <header>
+    <a href="/index.html">Home</a> | <a href="/feedback/{{{metadata.feedbackUrl}}}">Send Feedback</a>
+    <h1>{{{metadata.title}}}</h1>
+    <p>Published: {{metadata.published}}{{#metadata.updated}}&nbsp;&nbsp;•&nbsp;&nbsp;Updated: {{metadata.updated}}{{/metadata.updated}}&nbsp;&nbsp;•&nbsp;&nbsp;{{#metadata.tags}}{{^-first}}, {{/-first}}<a href="/index.html?tag={{.}}">{{.}}</a>{{/metadata.tags}}</p>
+  </header>
+ 	
+  <article class="markdown-body">
+  {{{html}}}
+  </article>
+  
+  <footer>
+  	<a href="/index.html">Home</a> | <a href="/feed.rss">RSS</a> | <a href="/feed.atom">Atom</a> | <a href="/feedback/{{{metadata.feedbackUrl}}}">Send Feedback</a>
+  </footer>
+
+</body>
+</html>

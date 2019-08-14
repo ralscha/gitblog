@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ralph's Blog</title>
+<link rel="stylesheet" href="assets/blog-2.css">
+<link href="/feed.rss" rel="alternate" type="application/rss+xml" title="Ralph's Blog: RSS Feed" />
+<link href="/feed.atom" rel="alternate" type="application/atom+xml" title="Ralph's Blog: Atom Feed" />
+</head>
+<body>
+  <header>
+    <h1>
+      Ralph's Blog
+      <span class="indexsubtitle">about this and that <span class="small">(<a href="/feed.rss">RSS</a> | <a href="/feed.atom">Atom</a>)</span></span>
+    </h1>
+    
+    
+    <div class="query">
+		<form action="/index.html" method="get">
+		  <input type="search" name="query"{{#query}} value="{{query}}"{{/query}}><input type="submit" value="Search">
+		</form>
+		
+		{{#years}}{{^-first}}&nbsp;|&nbsp;{{/-first}}{{#current}}<strong>{{year}}</strong>{{/current}}{{^current}}<a href="/index.html?year={{year}}">{{year}}</a>{{/current}}{{/years}}		
+	</div>	
+    
+  </header>
+{{#posts}}
+  <article class="indexarticle">
+    <h3><a href="/{{url}}">{{title}}</a></h3>
+    <p>Published: {{published}}{{#updated}}&nbsp;&nbsp;•&nbsp;&nbsp;Updated: {{updated}}{{/updated}}&nbsp;&nbsp;•&nbsp;&nbsp;{{#tags}}{{^-first}}, {{/-first}}<a href="/index.html?tag={{.}}">{{.}}</a>{{/tags}}</p>
+    {{#summary}}<p class="summary">{{summary}}</p>{{/summary}}
+  </article>
+{{/posts}}
+
+
+
+</body>
+</html>
+

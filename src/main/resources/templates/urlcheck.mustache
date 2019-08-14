@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ralph's Blog: URL Check</title>
+<link rel="stylesheet" href="/assets/blog-2.css">
+<style>
+    body {
+	  margin: 10px;
+	}
+	td {
+	  word-break: break-all;
+	  padding:5px;
+	  border:1px solid #000;
+	}
+	th {
+	  text-align: left;
+	  padding:5px;
+	  border:1px solid #000;	 
+      background-color:#000;
+	  color:white;
+	}
+
+	table { 
+	  background-color:#eee;
+	  border-collapse:collapse; 
+	}
+
+</style>
+</head>
+<body>
+  <h1>Ralph's Blog: URL Check</h1>    
+  <table>
+    <colgroup>
+       <col span="1" style="width: 30%;">
+       <col span="1" style="width: 30%;">
+       <col span="1" style="width: 50px;">
+       <col span="1" style="width: 40%;">
+    </colgroup>
+	<thead>
+	<tr>
+		<th>Post</th>
+		<th>URL</th>
+		<th>Status</th>
+		<th>Location</th>
+	</tr>
+	</thead>
+	<tbody>
+	
+	{{#checks}}
+	<tr>
+		<td><a href="/{{post}}">{{post}}</a></td>
+		<td>{{url}}</td>
+		<td>{{status}}</td>
+		<td>{{#location}}{{location}}{{/location}}</td>
+	</tr>
+	{{/checks}}
+	
+	</tbody>
+  </table>
+
+</body>
+</html>
+

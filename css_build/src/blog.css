@@ -1,0 +1,246 @@
+@font-face {
+	font-family: 'Source Sans Pro';
+	font-style: normal;
+	font-weight: 400;
+	src:
+		local('Source Sans Pro'),
+		local('SourceSansPro-Regular'),
+		url('fonts/Source_Sans_Pro_400.eot?#iefix') format('embedded-opentype'),
+		url('fonts/Source_Sans_Pro_400.woff') format('woff'),
+		url('fonts/Source_Sans_Pro_400.woff2') format('woff2'),
+		url('fonts/Source_Sans_Pro_400.svg#SourceSansPro') format('svg'),
+		url('fonts/Source_Sans_Pro_400.ttf') format('truetype');
+}
+@font-face {
+	font-family: 'Source Sans Pro';
+	font-style: normal;
+	font-weight: 600;
+	src:
+		local('Source Sans Pro Semibold'),
+		local('SourceSansPro-Semibold'),
+		url('fonts/Source_Sans_Pro_600.eot?#iefix') format('embedded-opentype'),
+		url('fonts/Source_Sans_Pro_600.woff') format('woff'),
+		url('fonts/Source_Sans_Pro_600.woff2') format('woff2'),
+		url('fonts/Source_Sans_Pro_600.svg#SourceSansPro') format('svg'),
+		url('fonts/Source_Sans_Pro_600.ttf') format('truetype');
+}
+@font-face {
+	font-family: 'Source Serif Pro';
+	font-style: normal;
+	font-weight: 400;
+	src:
+		local('Source Serif Pro'),
+		local('SourceSerifPro-Regular'),
+		url('fonts/Source_Serif_Pro_400.eot?#iefix') format('embedded-opentype'),
+		url('fonts/Source_Serif_Pro_400.woff') format('woff'),
+		url('fonts/Source_Serif_Pro_400.woff2') format('woff2'),
+		url('fonts/Source_Serif_Pro_400.svg#SourceSerifPro') format('svg'),
+		url('fonts/Source_Serif_Pro_400.ttf') format('truetype');
+}
+@font-face {
+	font-family: 'Source Serif Pro';
+	font-style: normal;
+	font-weight: 600;
+	src:
+		local('Source Serif Pro Semibold'),
+		local('SourceSerifPro-Semibold'),
+		url('fonts/Source_Serif_Pro_600.eot?#iefix') format('embedded-opentype'),
+		url('fonts/Source_Serif_Pro_600.woff') format('woff'),
+		url('fonts/Source_Serif_Pro_600.woff2') format('woff2'),
+		url('fonts/Source_Serif_Pro_600.svg#SourceSerifPro') format('svg'),
+		url('fonts/Source_Serif_Pro_600.ttf') format('truetype');
+}
+
+body {
+	background-color: #fdfdfd;
+}
+
+header, .indexarticle {
+	box-sizing: border-box;
+    min-width: 200px;
+    max-width: 990px;
+    margin: 3vh auto 3vh auto;
+    font-family: "Source Serif Pro", Georgia, serif;
+    font-weight: normal;
+	-ms-text-size-adjust: 100%;
+	-webkit-text-size-adjust: 100%;
+	line-height: 1.5;
+	color: black;
+	line-height: 1.5;
+	word-wrap: break-word;
+	padding: 0 5px;
+}
+
+.indexarticle {
+	padding: 0 30px;
+}
+
+.indexsubtitle {
+	font-weight: normal;
+	margin-left: 20px;
+	font-size: 26px;
+	color: #333;	
+}
+
+.indexsubtitle .small {
+	margin-left: 20px;
+	font-size: 16px;
+	color: #333;	
+}
+
+.query {
+	margin-top: 25px;
+	font-size: 20px;
+}
+
+.query form {
+	display: inline;
+    margin-right: 40px;
+}
+
+.query form input[type=search] {
+	width: 270px;
+}
+
+article.indexarticle h3 {
+	font-size: 28px;	
+	margin: 0;
+}
+
+article.indexarticle h3 a {
+   color: #0000EE;
+}
+
+article.indexarticle h3 a:hover {
+   color: #5151f7;
+}
+
+article.indexarticle p {
+	font-size: 16px;
+	margin: 0;
+	color: #888;
+}
+
+article.indexarticle p.summary {
+	font-size: 18px;
+}
+
+article.indexarticle p a {
+	color: #2196f3;
+	text-decoration: none;
+}
+
+header h1 {
+	font-size: 42px;
+	font-weight: 600;
+	color: #333;
+	margin: 0;
+	border-bottom: 0.1em solid #eee;
+}
+
+header p {
+	font-size: 16px;
+	margin: 2px 0 0 0;
+	color: #888;
+}
+
+header p a {
+	color: #2196f3;
+	text-decoration: none;
+}
+
+.markdown-body {
+    box-sizing: border-box;
+    min-width: 200px;
+    max-width: 990px;
+    margin: 0 auto;
+    padding: 0 10px;
+}
+
+footer {
+	font-size: 16px;
+	box-sizing: border-box;
+    min-width: 200px;
+    max-width: 990px;
+    padding: 0 10px;
+	margin: 30px auto 50px auto;
+	color: #888;
+	font-family: "Source Serif Pro", Georgia, serif;
+    font-weight: normal;
+	-ms-text-size-adjust: 100%;
+	-webkit-text-size-adjust: 100%;
+}
+
+form div {
+	box-sizing: border-box;
+ 	min-width: 200px;
+    max-width: 990px;	
+	margin: 0 auto;
+	padding: 0 10px;
+    font-family: "Source Serif Pro", Georgia, serif;
+    font-weight: normal;
+	-ms-text-size-adjust: 100%;
+	-webkit-text-size-adjust: 100%;	
+}
+
+form input, form textarea {
+	font-family: "Source Serif Pro", Georgia, serif;
+    font-weight: normal;
+	-ms-text-size-adjust: 100%;
+	-webkit-text-size-adjust: 100%;	
+}
+
+textarea {
+	width: 100%;
+	height: 200px;
+}
+
+input.textfield {
+	width: 100%;
+}
+
+label {
+	display: block;
+	margin: 20px 0 5px 0;
+}
+
+.back {
+	display: block;
+	margin: 40px 0 0 0;
+}
+
+p > small.gh {
+	font-family: Consolas,"Liberation Mono",Menlo,Courier,monospace;
+	font-size: 14px;
+	display: block;
+	margin-top: -18px;
+	margin-bottom: 12px;
+}
+
+.markdown-body, .markdown-body .x-form-display-field {
+  font-family: "Source Serif Pro", Georgia, serif;
+  font-size: 19px;
+}
+
+.markdown-body h1 > a, .markdown-body h2 > a, .markdown-body h3 > a, .markdown-body h4 > a, .markdown-body h5 > a, .markdown-body h6 > a {
+  text-decoration: none !important;
+  color: #24292e !important;
+}
+
+.markdown-body h2 {
+	margin-top: 60px;
+}
+
+header > h1 {
+	margin-top: 20px;
+}
+
+
+.language-css 
+.token.string,
+.style .token.string,
+.token.entity,
+.token.operator,
+.token.url {
+  background-color: #f6f8fa;
+}

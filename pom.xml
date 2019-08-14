@@ -1,0 +1,239 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+
+	<groupId>ch.rasc</groupId>
+	<artifactId>gitblog</artifactId>
+	<version>0.0.1</version>
+	<packaging>jar</packaging>
+
+	<name>gitblog</name>
+	<description>A git based blog software</description>
+
+	<parent>
+		<groupId>org.springframework.boot</groupId>
+		<artifactId>spring-boot-starter-parent</artifactId>
+		<version>2.1.7.RELEASE</version>
+		<relativePath />
+	</parent>
+
+	<properties>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+		<flexmark.version>0.50.26</flexmark.version>
+		<lucene.version>8.2.0</lucene.version>
+		<java.version>11</java.version>
+	</properties>
+
+	<dependencies>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-web</artifactId>
+			<exclusions>
+				<exclusion>
+					<groupId>org.springframework.boot</groupId>
+					<artifactId>spring-boot-starter-tomcat</artifactId>
+				</exclusion>
+			</exclusions>
+		</dependency>
+
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-undertow</artifactId>
+		</dependency>
+
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId> spring-boot-starter-mail</artifactId>
+		</dependency>
+
+		<dependency>
+			<groupId>com.samskivert</groupId>
+			<artifactId>jmustache</artifactId>
+		</dependency>
+
+		<dependency>
+			<groupId>com.github.dfabulich</groupId>
+			<artifactId>sitemapgen4j</artifactId>
+			<version>1.1.2</version>
+		</dependency>
+
+		<dependency>
+			<groupId>com.rometools</groupId>
+			<artifactId>rome</artifactId>
+			<version>1.12.1</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.yaml</groupId>
+			<artifactId>snakeyaml</artifactId>
+		</dependency>
+
+		<dependency>
+			<groupId>org.eclipse.jgit</groupId>
+			<artifactId>org.eclipse.jgit</artifactId>
+			<version>5.4.0.201906121030-r</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.jsoup</groupId>
+			<artifactId>jsoup</artifactId>
+			<version>1.12.1</version>
+		</dependency>
+
+		<dependency>
+			<groupId>com.squareup.okhttp3</groupId>
+			<artifactId>okhttp</artifactId>
+			<version>4.1.0</version>
+		</dependency>
+			
+		<dependency>
+			<groupId>com.github.ben-manes.caffeine</groupId>
+			<artifactId>caffeine</artifactId>
+		</dependency>
+
+		<dependency>
+			<groupId>com.vladsch.flexmark</groupId>
+			<artifactId>flexmark</artifactId>
+			<version>${flexmark.version}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>com.vladsch.flexmark</groupId>
+			<artifactId>flexmark-ext-autolink</artifactId>
+			<version>${flexmark.version}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>com.vladsch.flexmark</groupId>
+			<artifactId>flexmark-ext-tables</artifactId>
+			<version>${flexmark.version}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>com.vladsch.flexmark</groupId>
+			<artifactId>flexmark-ext-abbreviation</artifactId>
+			<version>${flexmark.version}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>com.vladsch.flexmark</groupId>
+			<artifactId>flexmark-ext-ins</artifactId>
+			<version>${flexmark.version}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>com.vladsch.flexmark</groupId>
+			<artifactId>flexmark-ext-superscript</artifactId>
+			<version>${flexmark.version}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>com.vladsch.flexmark</groupId>
+			<artifactId>flexmark-ext-emoji</artifactId>
+			<version>${flexmark.version}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>com.vladsch.flexmark</groupId>
+			<artifactId>flexmark-ext-definition</artifactId>
+			<version>${flexmark.version}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>com.vladsch.flexmark</groupId>
+			<artifactId>flexmark-ext-footnotes</artifactId>
+			<version>${flexmark.version}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>com.vladsch.flexmark</groupId>
+			<artifactId>flexmark-ext-anchorlink</artifactId>
+			<version>${flexmark.version}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.apache.lucene</groupId>
+			<artifactId>lucene-core</artifactId>
+			<version>${lucene.version}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.apache.lucene</groupId>
+			<artifactId>lucene-queryparser</artifactId>
+			<version>${lucene.version}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.apache.lucene</groupId>
+			<artifactId>lucene-analyzers-common</artifactId>
+			<version>${lucene.version}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.nibor.autolink</groupId>
+			<artifactId>autolink</artifactId>
+			<version>0.10.0</version>
+		</dependency>
+
+		<dependency>
+			<groupId>com.google.code.findbugs</groupId>
+			<artifactId>jsr305</artifactId>
+			<version>3.0.2</version>
+			<scope>provided</scope>
+		</dependency>
+
+		<dependency>
+			<groupId>software.amazon.awssdk</groupId>
+			<artifactId>s3</artifactId>
+			<version>2.7.23</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.hashids</groupId>
+			<artifactId>hashids</artifactId>
+			<version>1.0.3</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-configuration-processor</artifactId>
+			<optional>true</optional>
+		</dependency>
+	</dependencies>
+
+	<build>
+		<finalName>gitblog</finalName>
+		<plugins>
+			<plugin>
+				<groupId>org.springframework.boot</groupId>
+				<artifactId>spring-boot-maven-plugin</artifactId>
+				<configuration>
+					<executable>true</executable>
+					<excludes>
+						<exclude>
+							<groupId>com.google.code.findbugs</groupId>
+							<artifactId>jsr305</artifactId>
+						</exclude>
+					</excludes>
+				</configuration>
+			</plugin>
+
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<configuration>
+					<debug>true</debug>
+					<release>11</release>
+					<parameters>true</parameters>
+				</configuration>
+			</plugin>
+
+		</plugins>
+	</build>
+
+
+
+
+</project>
