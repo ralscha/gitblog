@@ -45,6 +45,8 @@ public class AppProperties {
 
 	private String ignoreUrlList;
 
+	private String brotliCmd;
+
 	public String getBlogTitle() {
 		return this.blogTitle;
 	}
@@ -195,6 +197,14 @@ public class AppProperties {
 
 	public void setIgnoreUrlList(String ignoreUrlList) {
 		this.ignoreUrlList = ignoreUrlList;
+	}
+
+	public String getBrotliCmd() {
+		return this.brotliCmd;
+	}
+
+	public void setBrotliCmd(String brotliCmd) {
+		this.brotliCmd = brotliCmd;
 	}
 
 }

@@ -65,6 +65,7 @@ public class FeedService {
 		}
 		if (Files.exists(feedFile)) {
 			FileService.gzip(feedFile);
+			FileService.brotli(this.appProperties.getBrotliCmd(), feedFile);
 		}
 	}
 
@@ -80,6 +81,7 @@ public class FeedService {
 		}
 		if (Files.exists(feedFile)) {
 			FileService.gzip(feedFile);
+			FileService.brotli(this.appProperties.getBrotliCmd(), feedFile);
 		}
 	}
 

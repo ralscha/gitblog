@@ -54,6 +54,7 @@ public class SitemapService {
 			Files.write(sitemapPath, result.getBytes(StandardCharsets.UTF_8));
 
 			FileService.gzip(sitemapPath);
+			FileService.brotli(this.appProperties.getBrotliCmd(), sitemapPath);
 		}
 		catch (IOException e) {
 			Application.logger.error("writeSitemap", e);

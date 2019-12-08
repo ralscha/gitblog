@@ -54,6 +54,8 @@ public class FileService {
 
 	private final PrismJsService prismJsService;
 
+	private final String brotliCmd;
+
 	private Template postTemplate;
 
 	private final Pattern headerPattern = Pattern.compile("---(.*?)---(.*)",
@@ -63,6 +65,7 @@ public class FileService {
 			GitHubCodeService gitHubCodeService, PrismJsService prismJsService,
 			Mustache.Compiler mustacheCompiler) {
 		this.workDir = Paths.get(appProperties.getWorkDir());
+		this.brotliCmd = appProperties.getBrotliCmd();
 		this.gitHubCodeService = gitHubCodeService;
 		this.markdownService = markdownService;
 		this.yaml = new Yaml();
@@ -125,6 +128,7 @@ public class FileService {
 					"html");
 			Files.write(htmlFile, postHtml.getBytes(StandardCharsets.UTF_8));
 			gzip(htmlFile);
+			brotli(this.brotliCmd, htmlFile);
 		}
 		catch (IOException e) {
 			Application.logger.error("generate", e);
@@ -209,9 +213,24 @@ public class FileService {
 			Files.copy(file, gzout);
 		}
 		catch (IOException e) {
-			Application.logger.error("gzip it", e);
+			Application.logger.error("gzip", e);
 		}
+	}
 
+	public static void brotli(String brotliCmd, Path file) {
+		if (brotliCmd != null && !brotliCmd.isBlank()) {
+			List<String> cmds = new ArrayList<>(List.of(brotliCmd.split(" ")));
+			cmds.add(file.toString());
+			ProcessBuilder builder = new ProcessBuilder(cmds);
+
+			try {
+				Process process = builder.start();
+				process.waitFor();
+			}
+			catch (IOException | InterruptedException e) {
+				Application.logger.error("brotli", e);
+			}
+		}
 	}
 
 }
