@@ -31,7 +31,9 @@ import okhttp3.Request;
 import okhttp3.Response;
 import okhttp3.ResponseBody;
 import okio.BufferedSink;
+import okio.BufferedSource;
 import okio.Okio;
+import okio.Sink;
 
 @Component
 public class PrismJsService {
@@ -154,10 +156,13 @@ public class PrismJsService {
 			Request request = new Request.Builder().url(downloadURL).build();
 			Path downloadedFile = parent.resolve("tmp.zip");
 			try (Response response = httpClient.newCall(request).execute()) {
-				try (BufferedSink sink = Okio.buffer(Okio.sink(downloadedFile))) {
+				try (Sink downloadSink = Okio.sink(downloadedFile);
+						BufferedSink sink = Okio.buffer(downloadSink)) {
 					try (ResponseBody body = response.body()) {
 						if (body != null) {
-							sink.writeAll(body.source());
+							try (BufferedSource source = body.source()) {
+								sink.writeAll(source);
+							}
 						}
 					}
 				}

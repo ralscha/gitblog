@@ -18,6 +18,7 @@ public class Application {
 	public static final Logger logger = LoggerFactory
 			.getLogger(MethodHandles.lookup().lookupClass());
 
+	@SuppressWarnings("resource")
 	public static void main(String[] args) {
 		SpringApplication.run(Application.class, args);
 	}
