@@ -14,6 +14,7 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
+import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
 import javax.net.ssl.HostnameVerifier;
@@ -25,6 +26,8 @@ import org.nibor.autolink.LinkType;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.stereotype.Component;
 
+import com.github.benmanes.caffeine.cache.Cache;
+import com.github.benmanes.caffeine.cache.Caffeine;
 import com.samskivert.mustache.Mustache;
 import com.samskivert.mustache.Template;
 
@@ -43,10 +46,14 @@ public class URLChecker {
 	private final AppProperties appProperties;
 
 	private final Template checkurlTemplate;
+	
+	private final Cache<String, URLCheck> urlCache;
 
 	public URLChecker(Mustache.Compiler mustacheCompiler, AppProperties appProperties)
 			throws IOException {
 
+		this.urlCache = Caffeine.newBuilder().expireAfterWrite(4, TimeUnit.HOURS).build();
+		
 		this.httpClient = new OkHttpClient.Builder()
 				.hostnameVerifier(new HostnameVerifier() {
 					@Override
@@ -99,7 +106,7 @@ public class URLChecker {
 							link.getEndIndex()));
 				}
 				if (!urls.isEmpty()) {
-					List<URLCheck> urlChecks = urls.parallelStream()
+					List<URLCheck> urlChecks = urls.stream()
 							.map(url -> checkUrl(post, url, ignoreUrls))
 							.filter(Objects::nonNull).collect(Collectors.toList());
 					results.addAll(urlChecks);
@@ -136,19 +143,30 @@ public class URLChecker {
 			return null;
 		}
 
+		String removedFragmentUrl = removeFragment(url);
+		URLCheck check = this.urlCache.getIfPresent(removedFragmentUrl);
+		if (check != null) {
+			return check;
+		}
+		
 		try {
 			Request request = new Request.Builder().url(url).header("User-Agent",
-					"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/71.0.3578.80 Safari/537.36")
+					"Mozilla/5.0 (Linux; Android 5.0; SM-G900P Build/LRX21T) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/80.0.3987.149 Mobile Safari/537.36")
 					.build();
 
 			try (Response response = this.httpClient.newCall(request).execute()) {
 				if (!response.isSuccessful()) {
 					if (response.isRedirect()) {
 						String location = response.header("Location");
-						return new URLCheck(url, post.getUrl(), response.code(),
+						URLCheck urlCheck = new URLCheck(url, post.getUrl(), response.code(),
 								location);
+						this.urlCache.put(removedFragmentUrl, urlCheck);
+						return urlCheck;
 					}
-					return new URLCheck(url, post.getUrl(), response.code(), null);
+					
+					URLCheck urlCheck = new URLCheck(url, post.getUrl(), response.code(), null);
+					this.urlCache.put(removedFragmentUrl, urlCheck);
+					return urlCheck;
 				}
 				return null;
 			}
@@ -159,7 +177,18 @@ public class URLChecker {
 		catch (Exception e) {
 			Application.logger.info("check url: " + url, e);
 		}
-		return new URLCheck(url, post.getUrl(), -1, null);
+		
+		URLCheck urlCheck = new URLCheck(url, post.getUrl(), -1, null);
+		this.urlCache.put(removedFragmentUrl, urlCheck);
+		return urlCheck;
 
+	}
+
+	private static String removeFragment(String url) {
+		int pos = url.lastIndexOf('#');
+		if (pos != -1) {
+			return url.substring(0, pos);
+		}
+		return url;
 	}
 }
