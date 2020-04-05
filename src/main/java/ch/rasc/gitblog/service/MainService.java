@@ -146,8 +146,8 @@ public class MainService {
 				.regenerateHtml(changedOrNewFiles);
 		this.luceneSerivce.index(changedPosts);
 
-		//only write feeds and sitemap if a published post changed
-		if (changedPosts.stream().anyMatch(post->!post.getMetadata().isDraft())) {
+		// only write feeds and sitemap if a published post changed
+		if (changedPosts.stream().anyMatch(post -> !post.getMetadata().isDraft())) {
 			Application.logger.info("Write Feeds and Sitemap");
 			writeFeedsAndSitemap();
 		}

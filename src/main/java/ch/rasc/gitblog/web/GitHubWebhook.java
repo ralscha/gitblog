@@ -19,7 +19,7 @@ import ch.rasc.gitblog.service.MainService;
 public class GitHubWebhook {
 
 	private final Mac mac;
-	
+
 	private final MainService mainService;
 
 	public GitHubWebhook(AppProperties appProperties, MainService mainService)

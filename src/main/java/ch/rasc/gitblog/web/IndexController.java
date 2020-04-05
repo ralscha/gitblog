@@ -98,7 +98,8 @@ public class IndexController {
 			posts = this.luceneService.getPostsOfYear(year);
 
 			final int queryYear = year;
-			yearNavigation = years.stream().map(y -> new YearNavigation(y, y == queryYear))
+			yearNavigation = years.stream()
+					.map(y -> new YearNavigation(y, y == queryYear))
 					.collect(Collectors.toList());
 		}
 		else {

@@ -1,5 +1,7 @@
 package ch.rasc.gitblog.dto;
 
+import java.util.Objects;
+
 public class URLCheck {
 	private final String url;
 
@@ -30,6 +32,25 @@ public class URLCheck {
 
 	public String getLocation() {
 		return this.location;
+	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(this.location, this.post, this.status, this.url);
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj) {
+			return true;
+		}
+		if (!(obj instanceof URLCheck)) {
+			return false;
+		}
+		URLCheck other = (URLCheck) obj;
+		return Objects.equals(this.location, other.location)
+				&& Objects.equals(this.post, other.post) && this.status == other.status
+				&& Objects.equals(this.url, other.url);
 	}
 
 }

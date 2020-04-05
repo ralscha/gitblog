@@ -53,15 +53,15 @@ public class GitHubCodeService {
 			String toStr = matcher.group(4);
 			Integer from = null;
 			Integer to = null;
-			
+
 			if (fromStr != null) {
 				from = Integer.valueOf(fromStr);
 			}
-			
-			if (toStr != null) {				
+
+			if (toStr != null) {
 				to = Integer.valueOf(toStr);
 			}
-			
+
 			if (from != null && to == null) {
 				to = from;
 			}

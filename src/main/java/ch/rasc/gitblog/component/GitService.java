@@ -43,15 +43,15 @@ public class GitService {
 			CloneCommand gitCommand = Git.cloneRepository()
 					.setURI(this.appProperties.getGitRepository())
 					.setDirectory(Paths.get(this.appProperties.getWorkDir()).toFile());
-	
+
 			if (StringUtils.hasText(this.appProperties.getGitRepositoryUser())) {
 				UsernamePasswordCredentialsProvider credentialsProvider = new UsernamePasswordCredentialsProvider(
 						this.appProperties.getGitRepositoryUser(),
 						this.appProperties.getGitRepositoryPassword());
-	
+
 				gitCommand.setCredentialsProvider(credentialsProvider);
 			}
-	
+
 			try (Git result = gitCommand.call()) {
 				return true;
 			}
@@ -59,7 +59,7 @@ public class GitService {
 				Application.logger.error("clone repository", e);
 			}
 		}
-		
+
 		return false;
 	}
 

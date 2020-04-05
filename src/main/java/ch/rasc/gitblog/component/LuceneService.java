@@ -98,7 +98,7 @@ public class LuceneService {
 
 	public void deleteIndex() {
 		this.publishedYears.clear();
-		
+
 		IndexWriterConfig config = new IndexWriterConfig(this.analyzer);
 		try (IndexWriter indexWriter = new IndexWriter(this.directory, config)) {
 			indexWriter.deleteAll();
@@ -137,20 +137,21 @@ public class LuceneService {
 
 			for (PostContent post : posts) {
 				if (!post.getMetadata().isDraft()) {
-					
+
 					this.publishedYears.add(post.getMetadata().getPublished().getYear());
-					
+
 					PostMetadata metadata = post.getMetadata();
 					String text = this.markdownService.renderText(post.getMarkdown());
 
 					Document doc = new Document();
 					doc.add(new TextField("body", text, Field.Store.NO));
 					doc.add(new TextField("body", metadata.getTitle(), Field.Store.NO));
-										
+
 					if (StringUtils.hasText(metadata.getSummary())) {
 						doc.add(new TextField("summary", metadata.getSummary(),
 								Field.Store.YES));
-						doc.add(new TextField("body", metadata.getSummary(), Field.Store.NO));
+						doc.add(new TextField("body", metadata.getSummary(),
+								Field.Store.NO));
 					}
 					doc.add(new TextField("title", metadata.getTitle(), Field.Store.YES));
 					doc.add(new StringField("url", metadata.getUrl(), Field.Store.YES));

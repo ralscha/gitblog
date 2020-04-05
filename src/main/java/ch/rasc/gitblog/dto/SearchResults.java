@@ -9,7 +9,8 @@ public class SearchResults {
 
 	private final List<YearNavigation> years;
 
-	public SearchResults(List<PostMetadata> posts, String query, List<YearNavigation> years) {
+	public SearchResults(List<PostMetadata> posts, String query,
+			List<YearNavigation> years) {
 		this.posts = posts;
 		this.query = query;
 		this.years = years;

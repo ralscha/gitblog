@@ -76,16 +76,17 @@ public class S3Backup {
 				&& this.appProperties.getAwsSecretKey() != null
 				&& this.appProperties.getAwsBucket() != null) {
 			try (S3Client s3Client = S3Client.builder().region(Region.US_EAST_1)
-					.credentialsProvider(StaticCredentialsProvider.create(
-							AwsBasicCredentials.create(this.appProperties.getAwsAccessKey(),
+					.credentialsProvider(
+							StaticCredentialsProvider.create(AwsBasicCredentials.create(
+									this.appProperties.getAwsAccessKey(),
 									this.appProperties.getAwsSecretKey())))
 					.build()) {
 
 				PutObjectRequest request = PutObjectRequest.builder()
 						.bucket(this.appProperties.getAwsBucket())
 						.key(LocalDateTime.now()
-								.format(DateTimeFormatter
-										.ofPattern("yyyy-MM-dd'T'HH_mm_ss", Locale.ENGLISH))
+								.format(DateTimeFormatter.ofPattern(
+										"yyyy-MM-dd'T'HH_mm_ss", Locale.ENGLISH))
 								+ ".zip")
 						.build();
 				s3Client.putObject(request, zipFile);

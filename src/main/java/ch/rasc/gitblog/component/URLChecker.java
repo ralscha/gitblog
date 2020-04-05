@@ -46,14 +46,14 @@ public class URLChecker {
 	private final AppProperties appProperties;
 
 	private final Template checkurlTemplate;
-	
+
 	private final Cache<String, URLCheck> urlCache;
 
 	public URLChecker(Mustache.Compiler mustacheCompiler, AppProperties appProperties)
 			throws IOException {
 
 		this.urlCache = Caffeine.newBuilder().expireAfterWrite(4, TimeUnit.HOURS).build();
-		
+
 		this.httpClient = new OkHttpClient.Builder()
 				.hostnameVerifier(new HostnameVerifier() {
 					@Override
@@ -109,6 +109,26 @@ public class URLChecker {
 					List<URLCheck> urlChecks = urls.stream()
 							.map(url -> checkUrl(post, url, ignoreUrls))
 							.filter(Objects::nonNull).collect(Collectors.toList());
+
+					List<URLCheck> url429Checks = urlChecks.stream()
+							.filter(u -> u.getStatus() == 429)
+							.collect(Collectors.toList());
+					if (!url429Checks.isEmpty()) {
+						try {
+							TimeUnit.SECONDS.sleep(30);
+						}
+						catch (InterruptedException e) {
+							// ignore this
+						}
+
+						if (url429Checks.stream()
+								.map(u -> checkUrl(post, u.getUrl(), ignoreUrls))
+								.filter(Objects::nonNull).collect(Collectors.toList())
+								.isEmpty()) {
+							urlChecks.removeAll(url429Checks);
+						}
+
+					}
 					results.addAll(urlChecks);
 				}
 			}
@@ -148,23 +168,24 @@ public class URLChecker {
 		if (check != null) {
 			return check;
 		}
-		
+
 		try {
 			Request request = new Request.Builder().url(url).header("User-Agent",
-					"Mozilla/5.0 (Linux; Android 5.0; SM-G900P Build/LRX21T) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/80.0.3987.149 Mobile Safari/537.36")
+					"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/80.0.3987.149 Safari/537.36")
 					.build();
 
 			try (Response response = this.httpClient.newCall(request).execute()) {
 				if (!response.isSuccessful()) {
 					if (response.isRedirect()) {
 						String location = response.header("Location");
-						URLCheck urlCheck = new URLCheck(url, post.getUrl(), response.code(),
-								location);
+						URLCheck urlCheck = new URLCheck(url, post.getUrl(),
+								response.code(), location);
 						this.urlCache.put(removedFragmentUrl, urlCheck);
 						return urlCheck;
 					}
-					
-					URLCheck urlCheck = new URLCheck(url, post.getUrl(), response.code(), null);
+
+					URLCheck urlCheck = new URLCheck(url, post.getUrl(), response.code(),
+							null);
 					this.urlCache.put(removedFragmentUrl, urlCheck);
 					return urlCheck;
 				}
@@ -177,7 +198,7 @@ public class URLChecker {
 		catch (Exception e) {
 			Application.logger.info("check url: " + url, e);
 		}
-		
+
 		URLCheck urlCheck = new URLCheck(url, post.getUrl(), -1, null);
 		this.urlCache.put(removedFragmentUrl, urlCheck);
 		return urlCheck;

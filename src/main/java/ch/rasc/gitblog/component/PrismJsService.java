@@ -80,7 +80,7 @@ public class PrismJsService {
 		downloadIfNotExists(appProperties.getPrismJsDownloadUrl());
 
 		try {
-			this.engine = new ScriptEngineManager().getEngineByName("nashorn");
+			this.engine = new ScriptEngineManager().getEngineByName("graal.js");
 			try (FileReader fr = new FileReader(this.prismCoreJs.toFile())) {
 				this.engine.eval(fr);
 			}
