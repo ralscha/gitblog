@@ -115,7 +115,7 @@ public class URLChecker {
 							.collect(Collectors.toList());
 					if (!url429Checks.isEmpty()) {
 						try {
-							TimeUnit.SECONDS.sleep(30);
+							TimeUnit.MINUTES.sleep(5);
 						}
 						catch (InterruptedException e) {
 							// ignore this
