@@ -4,13 +4,13 @@
   "private": true,
   "scripts": {
     "prebuild": "shx mkdir -p build && shx rm -rf dist/* && shx cp src/favicon.ico build",
-    "build": "npx cleancss --skip-rebase -o build/blog-3.css node_modules/normalize.css/normalize.css node_modules/github-markdown-css/github-markdown.css node_modules/prismjs/themes/prism.css src/blog.css",
+    "build": "npx cleancss --skip-rebase -o build/blog-4.css node_modules/normalize.css/normalize.css node_modules/github-markdown-css/github-markdown.css node_modules/prismjs/themes/prism.css src/blog.css",
     "postbuild": "bread-compressor build"
   },
   "dependencies": {
     "github-markdown-css": "4.0.0",
     "normalize.css": "8.0.1",
-    "prismjs": "1.19.0"
+    "prismjs": "1.20.0"
   },
   "devDependencies": {
     "bread-compressor-cli": "1.1.0",

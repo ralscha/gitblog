@@ -57,11 +57,11 @@ body {
 
 header, .indexarticle {
 	box-sizing: border-box;
-    min-width: 200px;
-    max-width: 990px;
-    margin: 3vh auto 3vh auto;
-    font-family: "Source Serif Pro", Georgia, serif;
-    font-weight: normal;
+  min-width: 200px;
+  max-width: 990px;
+  margin: 3vh auto 3vh auto;
+  font-family: "Source Serif Pro", Georgia, serif;
+  font-weight: normal;
 	-ms-text-size-adjust: 100%;
 	-webkit-text-size-adjust: 100%;
 	line-height: 1.5;
@@ -160,13 +160,13 @@ header p a {
 footer {
 	font-size: 16px;
 	box-sizing: border-box;
-    min-width: 200px;
-    max-width: 990px;
-    padding: 0 10px;
+  min-width: 200px;
+  max-width: 990px;
+  padding: 0 10px;
 	margin: 30px auto 50px auto;
 	color: #888;
 	font-family: "Source Serif Pro", Georgia, serif;
-    font-weight: normal;
+  font-weight: normal;
 	-ms-text-size-adjust: 100%;
 	-webkit-text-size-adjust: 100%;
 }
@@ -174,18 +174,18 @@ footer {
 form div {
 	box-sizing: border-box;
  	min-width: 200px;
-    max-width: 990px;	
+  max-width: 990px;	
 	margin: 0 auto;
 	padding: 0 10px;
-    font-family: "Source Serif Pro", Georgia, serif;
-    font-weight: normal;
+  font-family: "Source Serif Pro", Georgia, serif;
+  font-weight: normal;
 	-ms-text-size-adjust: 100%;
 	-webkit-text-size-adjust: 100%;	
 }
 
 form input, form textarea {
 	font-family: "Source Serif Pro", Georgia, serif;
-    font-weight: normal;
+  font-weight: normal;
 	-ms-text-size-adjust: 100%;
 	-webkit-text-size-adjust: 100%;	
 }
@@ -210,7 +210,7 @@ label {
 }
 
 p > small.gh {
-	font-family: Consolas,"Liberation Mono",Menlo,Courier,monospace;
+	font-family: SFMono-Regular, Consolas,"Liberation Mono",Menlo,Courier,monospace;
 	font-size: 14px;
 	display: block;
 	margin-top: -18px;
