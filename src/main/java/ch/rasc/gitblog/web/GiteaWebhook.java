@@ -5,7 +5,6 @@ import java.util.Map;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -33,9 +32,7 @@ public class GiteaWebhook {
 
 	@PostMapping("/webhook")
 	@ResponseStatus(HttpStatus.NO_CONTENT)
-	public void handleWebhook(
-			@SuppressWarnings("unused") @RequestHeader("X-Gitea-Delivery") String delivery,
-			@RequestBody String body) {
+	public void handleWebhook(@RequestBody String body) {
 
 		try {
 			Map<String, Object> json = this.objectMapper.readValue(body, Map.class);
