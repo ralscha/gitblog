@@ -22,7 +22,7 @@
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 		<flexmark.version>0.62.2</flexmark.version>
-		<lucene.version>8.6.1</lucene.version>
+		<lucene.version>8.6.2</lucene.version>
 		<java.version>14</java.version>
 	</properties>
 
@@ -199,12 +199,12 @@
 		<dependency>
 			<groupId>org.graalvm.js</groupId>
 			<artifactId>js</artifactId>
-			<version>20.1.0</version>
+			<version>20.2.0</version>
 		</dependency>	
 		<dependency>
 			<groupId>org.graalvm.js</groupId>
 			<artifactId>js-scriptengine</artifactId>
-			<version>20.1.0</version>
+			<version>20.2.0</version>
 		</dependency>
 
 		<dependency>
