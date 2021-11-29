@@ -97,6 +97,7 @@ public class FileService {
 		for (String url : deletedFiles) {
 			Path mdFile = this.workDir.resolve(url);
 			try {
+				Files.deleteIfExists(PostMetadata.siblingPath(mdFile, "html.br"));
 				Files.deleteIfExists(PostMetadata.siblingPath(mdFile, "html.gz"));
 				Files.deleteIfExists(PostMetadata.siblingPath(mdFile, "html"));
 			}
