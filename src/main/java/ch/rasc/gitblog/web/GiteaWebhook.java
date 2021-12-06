@@ -44,7 +44,6 @@ public class GiteaWebhook {
 			sb.append(String.format("%02x", b));
 		}
 		String computedSignature = "sha1=" + sb.toString();
-		System.out.println(computedSignature);
 		if (signature.equals(computedSignature)) {
 			this.mainService.setup();
 		}
