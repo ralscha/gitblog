@@ -1,48 +1,52 @@
 package ch.rasc.gitblog.web;
 
-import java.util.Map;
+import java.security.InvalidKeyException;
+import java.security.NoSuchAlgorithmException;
+
+import javax.crypto.Mac;
+import javax.crypto.spec.SecretKeySpec;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-
 import ch.rasc.gitblog.AppProperties;
-import ch.rasc.gitblog.Application;
 import ch.rasc.gitblog.service.MainService;
 
 @RestController
 public class GiteaWebhook {
-
-	private final ObjectMapper objectMapper;
-
-	private final String secret;
+	private final Mac mac;
 
 	private final MainService mainService;
 
-	public GiteaWebhook(ObjectMapper objectMapper, AppProperties appProperties,
-			MainService mainService) {
-		this.objectMapper = objectMapper;
-		this.secret = appProperties.getWebhookSecret();
+	public GiteaWebhook(AppProperties appProperties, MainService mainService)
+			throws InvalidKeyException, NoSuchAlgorithmException {
+		SecretKeySpec keySpec = new SecretKeySpec(
+				appProperties.getWebhookSecret().getBytes(), "HmacSHA1");
+
+		this.mac = Mac.getInstance("HmacSHA1");
+		this.mac.init(keySpec);
 		this.mainService = mainService;
 	}
 
 	@PostMapping("/webhook")
 	@ResponseStatus(HttpStatus.NO_CONTENT)
-	public void handleWebhook(@RequestBody String body) {
+	public void handleWebhook(@RequestHeader("X-Hub-Signature") String signature,
+			@RequestBody String body) {
 
-		try {
-			Map<String, Object> json = this.objectMapper.readValue(body, Map.class);
-			String sentSecret = (String) json.get("secret");
-			if (this.secret.equals(sentSecret)) {
-				this.mainService.setup();
-			}
+		byte[] result = this.mac.doFinal(body.getBytes());
+
+		StringBuilder sb = new StringBuilder();
+		for (byte b : result) {
+			sb.append(String.format("%02x", b));
 		}
-		catch (Exception e) {
-			Application.logger.error("handle webhook", e);
+		String computedSignature = "sha1=" + sb.toString();
+
+		if (signature.equals(computedSignature)) {
+			this.mainService.setup();
 		}
 
 	}
