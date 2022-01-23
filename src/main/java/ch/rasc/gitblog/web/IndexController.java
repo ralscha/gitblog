@@ -86,14 +86,14 @@ public class IndexController {
 			posts = this.luceneService.searchWithTag(tag);
 
 			yearNavigation = years.stream().map(y -> new YearNavigation(y, false))
-					.collect(Collectors.toList());
+					.sorted(Comparator.reverseOrder()).toList();
 		}
 		else if (StringUtils.hasText(query)) {
 			posts = this.luceneService.searchWithQuery(query);
 			queryString = query;
 
 			yearNavigation = years.stream().map(y -> new YearNavigation(y, false))
-					.collect(Collectors.toList());
+					.sorted(Comparator.reverseOrder()).toList();
 		}
 		else if (year != null) {
 			posts = this.luceneService.getPostsOfYear(year);
@@ -101,7 +101,7 @@ public class IndexController {
 			final int queryYear = year;
 			yearNavigation = years.stream()
 					.map(y -> new YearNavigation(y, y == queryYear))
-					.collect(Collectors.toList());
+					.sorted(Comparator.reverseOrder()).toList();
 		}
 		else {
 			int currentYear = LocalDate.now().getYear();

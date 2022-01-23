@@ -111,6 +111,8 @@ public class FeedbackController {
 	public ResponseEntity<?> feedback(@PathVariable("url") String url) {
 
 		String feedbackHtml = this.feedbackTemplate.execute(new Object() {
+			@SuppressWarnings({ "unused" })
+			String postUrl = url;
 			@SuppressWarnings("unused")
 			String token = FeedbackController.this.hashids
 					.encode(System.currentTimeMillis());

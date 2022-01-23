@@ -131,6 +131,8 @@ public class URLChecker {
 		}
 
 		String checkHtml = this.checkurlTemplate.execute(new Object() {
+			@SuppressWarnings({ "unused" })
+			List<URLCheck> checks = results;
 		});
 
 		try {
