@@ -244,3 +244,5 @@ header > h1 {
 .token.url {
   background-color: #f6f8fa;
 }
+
+:focus:not(:focus-visible) { outline: none }

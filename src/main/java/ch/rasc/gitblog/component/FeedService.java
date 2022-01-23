@@ -89,7 +89,7 @@ public class FeedService {
 		String baseURL = this.appProperties.getBaseUrl();
 
 		SyndFeed feed;
-		if (feedType.equals("rss_2.0")) {
+		if ("rss_2.0".equals(feedType)) {
 			feed = new CustomFeedEntry();
 		}
 		else {
@@ -105,7 +105,7 @@ public class FeedService {
 		feed.setUri(baseURL);
 
 		AtomNSModule atomNSModule = new AtomNSModuleImpl();
-		String link = feedType.equals("rss_2.0") ? "feed.rss" : "feed.atom";
+		String link = "rss_2.0".equals(feedType) ? "feed.rss" : "feed.atom";
 		atomNSModule.setLink(baseURL + link);
 		feed.getModules().add(atomNSModule);
 
@@ -114,7 +114,7 @@ public class FeedService {
 		List<SyndEntry> entries = new ArrayList<>();
 		for (PostMetadata post : posts) {
 			SyndEntry entry;
-			if (feedType.equals("rss_2.0")) {
+			if ("rss_2.0".equals(feedType)) {
 				entry = new CustomSyndEntry();
 			}
 			else {

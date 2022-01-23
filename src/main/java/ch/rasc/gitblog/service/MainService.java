@@ -73,30 +73,28 @@ public class MainService {
 				changes.forEach(c -> Application.logger.info("Git Change: {}", c));
 				handleChanges(changes);
 			}
-			else {
-				if (this.luceneSerivce.hasIndex()) {
-					Application.logger.info("Has Index");
-					List<PostMetadata> publishedPosts = this.luceneSerivce.getAll();
-					if (!this.feedService.filesExists()) {
-						Application.logger.info("Generate Feeds");
-						this.feedService.writeFeeds(publishedPosts);
-					}
-					if (!this.sitemapService.fileExists()) {
-						Application.logger.info("Generate SiteMap");
-						this.sitemapService.writeSitemap(publishedPosts);
-						this.sitemapService.pingSearchEngines();
-					}
+			else if (this.luceneSerivce.hasIndex()) {
+				Application.logger.info("Has Index");
+				List<PostMetadata> publishedPosts = this.luceneSerivce.getAll();
+				if (!this.feedService.filesExists()) {
+					Application.logger.info("Generate Feeds");
+					this.feedService.writeFeeds(publishedPosts);
+				}
+				if (!this.sitemapService.fileExists()) {
+					Application.logger.info("Generate SiteMap");
+					this.sitemapService.writeSitemap(publishedPosts);
+					this.sitemapService.pingSearchEngines();
+				}
 
-					if (!this.urlChecker.reportExists()) {
-						Application.logger.info("Generate URL Check Report");
-						this.executorService
-								.submit(() -> this.urlChecker.checkURLs(publishedPosts));
-					}
+				if (!this.urlChecker.reportExists()) {
+					Application.logger.info("Generate URL Check Report");
+					this.executorService
+							.submit(() -> this.urlChecker.checkURLs(publishedPosts));
 				}
-				else {
-					Application.logger.info("No Index. Generate All");
-					generateAll();
-				}
+			}
+			else {
+				Application.logger.info("No Index. Generate All");
+				generateAll();
 			}
 		}
 	}

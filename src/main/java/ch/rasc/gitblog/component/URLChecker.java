@@ -17,9 +17,6 @@ import java.util.Set;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
-import javax.net.ssl.HostnameVerifier;
-import javax.net.ssl.SSLSession;
-
 import org.nibor.autolink.LinkExtractor;
 import org.nibor.autolink.LinkSpan;
 import org.nibor.autolink.LinkType;
@@ -55,12 +52,8 @@ public class URLChecker {
 		this.urlCache = Caffeine.newBuilder().expireAfterWrite(4, TimeUnit.HOURS).build();
 
 		this.httpClient = new OkHttpClient.Builder()
-				.hostnameVerifier(new HostnameVerifier() {
-					@Override
-					public boolean verify(String hostname, SSLSession session) {
-						return true;
-					}
-				}).followRedirects(false).followSslRedirects(false).build();
+				.hostnameVerifier((hostname, session) -> true).followRedirects(false)
+				.followSslRedirects(false).build();
 
 		this.appProperties = appProperties;
 
@@ -111,7 +104,7 @@ public class URLChecker {
 							.filter(Objects::nonNull).collect(Collectors.toList());
 
 					List<URLCheck> url429Checks = urlChecks.stream()
-							.filter(u -> u.getStatus() == 429)
+							.filter(u -> u.status() == 429)
 							.collect(Collectors.toList());
 					if (!url429Checks.isEmpty()) {
 						try {
@@ -122,7 +115,7 @@ public class URLChecker {
 						}
 
 						if (url429Checks.stream()
-								.map(u -> checkUrl(post, u.getUrl(), ignoreUrls))
+								.map(u -> checkUrl(post, u.url(), ignoreUrls))
 								.filter(Objects::nonNull).collect(Collectors.toList())
 								.isEmpty()) {
 							urlChecks.removeAll(url429Checks);
@@ -138,8 +131,6 @@ public class URLChecker {
 		}
 
 		String checkHtml = this.checkurlTemplate.execute(new Object() {
-			@SuppressWarnings({ "unused" })
-			List<URLCheck> checks = results;
 		});
 
 		try {

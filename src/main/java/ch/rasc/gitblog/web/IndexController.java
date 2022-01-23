@@ -7,6 +7,7 @@ import java.nio.charset.StandardCharsets;
 import java.time.LocalDate;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Locale;
 import java.util.Set;
@@ -114,7 +115,7 @@ public class IndexController {
 			final int queryYear = currentYear;
 			yearNavigation = years.stream()
 					.map(y -> new YearNavigation(y, y == queryYear))
-					.collect(Collectors.toList());
+					.sorted(Comparator.reverseOrder()).toList();
 		}
 
 		SearchResults result = new SearchResults(posts, queryString, yearNavigation);
