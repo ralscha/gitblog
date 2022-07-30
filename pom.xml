@@ -14,7 +14,7 @@
 	<parent>
 		<groupId>org.springframework.boot</groupId>
 		<artifactId>spring-boot-starter-parent</artifactId>
-		<version>2.7.1</version>
+		<version>2.7.2</version>
 		<relativePath />
 	</parent>
 
@@ -22,8 +22,9 @@
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 		<flexmark.version>0.64.0</flexmark.version>
-		<lucene.version>9.2.0</lucene.version>
+		<lucene.version>9.3.0</lucene.version>
 		<java.version>17</java.version>
+		<caffeine.version>3.1.1</caffeine.version>
 	</properties>
 
 	<dependencies>
@@ -84,13 +85,13 @@
 		<dependency>
 			<groupId>org.jsoup</groupId>
 			<artifactId>jsoup</artifactId>
-			<version>1.15.1</version>
+			<version>1.15.2</version>
 		</dependency>
 
 		<dependency>
 			<groupId>com.squareup.okhttp3</groupId>
 			<artifactId>okhttp-jvm</artifactId>
-			<version>5.0.0-alpha.9</version>
+			<version>5.0.0-alpha.10</version>
 		</dependency>
 			
 		<dependency>
@@ -192,7 +193,7 @@
 		<dependency>
 			<groupId>software.amazon.awssdk</groupId>
 			<artifactId>s3</artifactId>
-			<version>2.17.219</version>
+			<version>2.17.243</version>
 		</dependency>
 
 		<dependency>
@@ -204,12 +205,12 @@
 		<dependency>
 			<groupId>org.graalvm.js</groupId>
 			<artifactId>js</artifactId>
-			<version>22.1.0.1</version>
+			<version>22.2.0</version>
 		</dependency>	
 		<dependency>
 			<groupId>org.graalvm.js</groupId>
 			<artifactId>js-scriptengine</artifactId>
-			<version>22.1.0.1</version>
+			<version>22.2.0</version>
 		</dependency>
 
 		<dependency>
