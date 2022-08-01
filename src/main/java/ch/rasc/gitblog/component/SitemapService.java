@@ -69,12 +69,7 @@ public class SitemapService {
 		HttpUrl googlePingUrl = new HttpUrl.Builder().scheme("https").host("google.com")
 				.addPathSegment("ping").addQueryParameter("sitemap", sitemapUrl).build();
 
-		HttpUrl bingPingUrl = new HttpUrl.Builder().scheme("https").host("www.bing.com")
-				.addPathSegment("webmaster").addPathSegment("ping.aspx")
-				.addQueryParameter("siteMap", sitemapUrl).build();
-
 		ping(httpClient, googlePingUrl);
-		ping(httpClient, bingPingUrl);
 	}
 
 	private static void ping(OkHttpClient httpClient, HttpUrl pingUrl) {
