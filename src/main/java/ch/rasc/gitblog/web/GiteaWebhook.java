@@ -7,6 +7,7 @@ import javax.crypto.Mac;
 import javax.crypto.spec.SecretKeySpec;
 
 import org.springframework.http.HttpStatus;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
@@ -24,12 +25,20 @@ public class GiteaWebhook {
 
 	public GiteaWebhook(AppProperties appProperties, MainService mainService)
 			throws InvalidKeyException, NoSuchAlgorithmException {
-		SecretKeySpec keySpec = new SecretKeySpec(
-				appProperties.getWebhookSecret().getBytes(), "HmacSHA1");
 
-		this.mac = Mac.getInstance("HmacSHA1");
-		this.mac.init(keySpec);
-		this.mainService = mainService;
+		String webhookSecret = appProperties.getWebhookSecret();
+		if (StringUtils.hasText(webhookSecret)) {
+			SecretKeySpec keySpec = new SecretKeySpec(webhookSecret.getBytes(),
+					"HmacSHA1");
+
+			this.mac = Mac.getInstance("HmacSHA1");
+			this.mac.init(keySpec);
+			this.mainService = mainService;
+		}
+		else {
+			this.mac = null;
+			this.mainService = null;
+		}
 	}
 
 	@PostMapping("/webhook")
