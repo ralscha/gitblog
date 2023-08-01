@@ -93,8 +93,8 @@ public class MainService {
 				}
 			}
 			else {
-				Application.logger.info("No Index. Generate All");
-				generateAll();
+				Application.logger.info("No Index. Index All");
+				indexAll();
 			}
 		}
 	}
@@ -162,6 +162,12 @@ public class MainService {
 		this.luceneSerivce.index(allPosts);
 
 		writeFeedsAndSitemap();
+	}
+	
+	private void indexAll() {
+		List<PostContent> allPosts = this.fileService.collectAndReadPosts();
+		this.luceneSerivce.deleteIndex();
+		this.luceneSerivce.index(allPosts);
 	}
 
 	private void writeFeedsAndSitemap() {
