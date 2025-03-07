@@ -11,8 +11,6 @@ import java.util.Set;
 import java.util.TreeSet;
 import java.util.stream.Collectors;
 
-import jakarta.annotation.PreDestroy;
-
 import org.apache.lucene.analysis.Analyzer;
 import org.apache.lucene.analysis.standard.StandardAnalyzer;
 import org.apache.lucene.document.Document;
@@ -25,6 +23,7 @@ import org.apache.lucene.index.DirectoryReader;
 import org.apache.lucene.index.IndexReader;
 import org.apache.lucene.index.IndexWriter;
 import org.apache.lucene.index.IndexWriterConfig;
+import org.apache.lucene.index.StoredFields;
 import org.apache.lucene.index.Term;
 import org.apache.lucene.queryparser.classic.ParseException;
 import org.apache.lucene.queryparser.classic.QueryParser;
@@ -45,6 +44,7 @@ import ch.rasc.gitblog.AppProperties;
 import ch.rasc.gitblog.Application;
 import ch.rasc.gitblog.dto.PostContent;
 import ch.rasc.gitblog.dto.PostMetadata;
+import jakarta.annotation.PreDestroy;
 
 @Component
 public class LuceneService {
@@ -227,9 +227,10 @@ public class LuceneService {
 			TopFieldDocs topDocs = indexSearcher.search(query, 1000,
 					new Sort(new SortField("publishedts", SortField.Type.LONG, true)));
 
+			StoredFields storedFields = indexSearcher.storedFields();
 			for (ScoreDoc sd : topDocs.scoreDocs) {
 				int docId = sd.doc;
-				Document doc = indexSearcher.doc(docId);
+				Document doc = storedFields.document(docId);
 				posts.add(new PostMetadata(doc));
 			}
 		}
