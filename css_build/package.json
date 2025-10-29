@@ -8,13 +8,13 @@
     "postbuild": "bread-compressor build"
   },
   "dependencies": {
-    "github-markdown-css": "5.5.0",
+    "github-markdown-css": "5.8.1",
     "normalize.css": "8.0.1",
-    "prismjs": "1.29.0"
+    "prismjs": "1.30.0"
   },
   "devDependencies": {
     "bread-compressor-cli": "3.1.2",
     "clean-css-cli": "5.6.3",
-    "shx": "0.3.4"
+    "shx": "0.4.0"
   }
 }
