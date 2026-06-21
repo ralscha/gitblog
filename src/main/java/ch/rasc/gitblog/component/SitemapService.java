@@ -82,8 +82,10 @@ public class SitemapService {
 
 			@Override
 			public void onResponse(Call call, Response response) throws IOException {
-				if (!response.isSuccessful()) {
-					Application.logger.error("Unexpected code " + response);
+				try (response) {
+					if (!response.isSuccessful()) {
+						Application.logger.error("Unexpected code " + response);
+					}
 				}
 			}
 		});

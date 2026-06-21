@@ -9,7 +9,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 import java.util.TreeSet;
-import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import org.apache.lucene.analysis.Analyzer;
 import org.apache.lucene.analysis.standard.StandardAnalyzer;
@@ -70,7 +70,7 @@ public class LuceneService {
 
 		this.publishedYears
 				.addAll(this.getAll().stream().map(post -> post.getPublished().getYear())
-						.distinct().collect(Collectors.toList()));
+						.distinct().toList());
 	}
 
 	@PreDestroy
@@ -88,7 +88,9 @@ public class LuceneService {
 	public boolean hasIndex() {
 		try {
 			Path luceneDir = Paths.get(this.appProperties.getLuceneDir());
-			return Files.list(luceneDir).count() > 1;
+			try (Stream<Path> paths = Files.list(luceneDir)) {
+				return paths.count() > 1;
+			}
 		}
 		catch (IOException e) {
 			Application.logger.error("hasIndex", e);

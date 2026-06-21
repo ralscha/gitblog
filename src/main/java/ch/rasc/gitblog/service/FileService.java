@@ -18,7 +18,7 @@ import java.util.Objects;
 import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import java.util.stream.Collectors;
+import java.util.stream.Stream;
 import java.util.zip.Deflater;
 
 import org.springframework.core.io.ClassPathResource;
@@ -115,9 +115,12 @@ public class FileService {
 
 			Application.logger.info("creating html for {}", mdFile);
 			PostContent content = readPost(mdFile);
+			if (content == null) {
+				continue;
+			}
 			generateHtml(content);
 
-			posts.add(readPost(mdFile));
+			posts.add(content);
 		}
 		return posts;
 	}
@@ -144,14 +147,13 @@ public class FileService {
 
 	public List<PostContent> collectAndReadPosts() {
 		return collectMdFiles().stream().map(this::readPost).filter(Objects::nonNull)
-				.collect(Collectors.toList());
+				.toList();
 	}
 
 	public PostContent readPost(Path mdFile) {
 		try {
 			// read markdown
-			String content = new String(Files.readAllBytes(mdFile),
-					StandardCharsets.UTF_8);
+			String content = Files.readString(mdFile, StandardCharsets.UTF_8);
 
 			// extract header
 			Matcher matcher = this.headerPattern.matcher(content);
@@ -185,20 +187,22 @@ public class FileService {
 	public void walkFiles(SimpleFileVisitor<Path> visitor) {
 
 		try {
-			Files.list(this.workDir).forEach(rootPath -> {
-				if (Files.isDirectory(rootPath)) {
-					String dirName = rootPath.getFileName().toString();
-					Matcher matcher = this.dirPattern.matcher(dirName);
-					if (matcher.matches()) {
-						try {
-							Files.walkFileTree(rootPath, visitor);
-						}
-						catch (IOException e) {
-							Application.logger.error("collect posts", e);
+			try (Stream<Path> rootPaths = Files.list(this.workDir)) {
+				rootPaths.forEach(rootPath -> {
+					if (Files.isDirectory(rootPath)) {
+						String dirName = rootPath.getFileName().toString();
+						Matcher matcher = this.dirPattern.matcher(dirName);
+						if (matcher.matches()) {
+							try {
+								Files.walkFileTree(rootPath, visitor);
+							}
+							catch (IOException e) {
+								Application.logger.error("collect posts", e);
+							}
 						}
 					}
-				}
-			});
+				});
+			}
 		}
 		catch (IOException e) {
 			Application.logger.error("collect posts", e);
@@ -220,16 +224,23 @@ public class FileService {
 
 	public static void brotli(String brotliCmd, Path file) {
 		if (brotliCmd != null && !brotliCmd.isBlank()) {
-			List<String> cmds = new ArrayList<>(List.of(brotliCmd.split(" ")));
+			List<String> cmds = new ArrayList<>(List.of(brotliCmd.trim().split("\\s+")));
 			cmds.add(file.toString());
 			ProcessBuilder builder = new ProcessBuilder(cmds);
 
 			try {
 				Process process = builder.start();
-				process.waitFor();
+				int exitCode = process.waitFor();
+				if (exitCode != 0) {
+					Application.logger.error("brotli exited with code {}", exitCode);
+				}
 			}
-			catch (IOException | InterruptedException e) {
+			catch (IOException e) {
 				Application.logger.error("brotli", e);
+			}
+			catch (InterruptedException e) {
+				Thread.currentThread().interrupt();
+				Application.logger.error("brotli interrupted", e);
 			}
 		}
 	}

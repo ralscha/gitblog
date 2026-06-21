@@ -11,11 +11,11 @@ import java.util.ArrayList;
 import java.util.EnumSet;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Locale;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
-import java.util.stream.Collectors;
 
 import org.nibor.autolink.LinkExtractor;
 import org.nibor.autolink.LinkSpan;
@@ -90,8 +90,7 @@ public class URLChecker {
 		for (PostMetadata post : posts) {
 			try {
 				Path htmlFile = PostMetadata.siblingPath(post.getMdFile(), "html");
-				String htmlContent = new String(Files.readAllBytes(htmlFile),
-						StandardCharsets.UTF_8);
+				String htmlContent = Files.readString(htmlFile, StandardCharsets.UTF_8);
 
 				Set<String> urls = new HashSet<>();
 				for (LinkSpan link : linkExtractor.extractLinks(htmlContent)) {
@@ -99,25 +98,25 @@ public class URLChecker {
 							link.getEndIndex()));
 				}
 				if (!urls.isEmpty()) {
-					List<URLCheck> urlChecks = urls.stream()
+					List<URLCheck> urlChecks = new ArrayList<>(urls.stream()
 							.map(url -> checkUrl(post, url, ignoreUrls))
-							.filter(Objects::nonNull).collect(Collectors.toList());
+							.filter(Objects::nonNull).toList());
 
 					List<URLCheck> url429Checks = urlChecks.stream()
-							.filter(u -> u.status() == 429)
-							.collect(Collectors.toList());
+							.filter(u -> u.status() == 429).toList();
 					if (!url429Checks.isEmpty()) {
 						try {
 							TimeUnit.MINUTES.sleep(5);
 						}
 						catch (InterruptedException e) {
-							// ignore this
+							Thread.currentThread().interrupt();
+							Application.logger.error("URL retry sleep interrupted", e);
+							return;
 						}
 
 						if (url429Checks.stream()
 								.map(u -> checkUrl(post, u.url(), ignoreUrls))
-								.filter(Objects::nonNull).collect(Collectors.toList())
-								.isEmpty()) {
+								.filter(Objects::nonNull).findAny().isEmpty()) {
 							urlChecks.removeAll(url429Checks);
 						}
 
@@ -151,7 +150,8 @@ public class URLChecker {
 	private URLCheck checkUrl(PostMetadata post, String url, Set<String> ignoreUrls) {
 
 		Optional<String> ignoredUrl = ignoreUrls.stream()
-				.filter(iu -> url.toLowerCase().startsWith(iu.toLowerCase())).findAny();
+				.filter(iu -> url.toLowerCase(Locale.ROOT)
+					.startsWith(iu.toLowerCase(Locale.ROOT))).findAny();
 		if (ignoredUrl.isPresent()) {
 			return null;
 		}

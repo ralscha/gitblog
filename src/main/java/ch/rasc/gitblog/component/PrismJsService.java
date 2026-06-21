@@ -1,11 +1,12 @@
 package ch.rasc.gitblog.component;
 
-import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStream;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
@@ -81,7 +82,7 @@ public class PrismJsService {
 
 		try {
 			this.engine = new ScriptEngineManager().getEngineByName("graal.js");
-			try (FileReader fr = new FileReader(this.prismCoreJs.toFile())) {
+			try (var fr = Files.newBufferedReader(this.prismCoreJs, StandardCharsets.UTF_8)) {
 				this.engine.eval(fr);
 			}
 		}
@@ -90,7 +91,7 @@ public class PrismJsService {
 		}
 	}
 
-	public String prism(String html) {
+	public synchronized String prism(String html) {
 		Document doc = Jsoup.parse(html);
 		Elements codeElements = doc.select("code[class*=\"language-\"]");
 		for (Element codeElement : codeElements) {
@@ -116,7 +117,7 @@ public class PrismJsService {
 				Path componentFile = this.prismComponentsDir
 						.resolve("prism-" + lang + ".js");
 				if (Files.exists(componentFile)) {
-					try (FileReader fr = new FileReader(componentFile.toFile())) {
+					try (var fr = Files.newBufferedReader(componentFile, StandardCharsets.UTF_8)) {
 						this.engine.eval(fr);
 					}
 					this.engine.eval("var lang = Prism.languages." + lang);
@@ -156,38 +157,46 @@ public class PrismJsService {
 			Request request = new Request.Builder().url(downloadURL).build();
 			Path downloadedFile = parent.resolve("tmp.zip");
 			try (Response response = httpClient.newCall(request).execute()) {
-				try (Sink downloadSink = Okio.sink(downloadedFile);
-						BufferedSink sink = Okio.buffer(downloadSink)) {
-					try (ResponseBody body = response.body()) {
-						if (body != null) {
-							try (BufferedSource source = body.source()) {
-								sink.writeAll(source);
-							}
-						}
+				if (!response.isSuccessful()) {
+					Application.logger.error("fetchCode: unexpected code " + response);
+					return;
+				}
+				try (ResponseBody body = response.body()) {
+					if (body == null) {
+						return;
+					}
+					try (Sink downloadSink = Okio.sink(downloadedFile);
+							BufferedSink sink = Okio.buffer(downloadSink);
+							BufferedSource source = body.source()) {
+						sink.writeAll(source);
 					}
 				}
 			}
 			catch (IOException e) {
 				Application.logger.error("fetchCode", e);
+				return;
 			}
 
+			Path normalizedParent = parent.toAbsolutePath().normalize();
 			try (InputStream is = Files.newInputStream(downloadedFile);
 					ZipInputStream zis = new ZipInputStream(is)) {
 
 				ZipEntry zipEntry = zis.getNextEntry();
 				while (zipEntry != null) {
-					String fileName = zipEntry.getName();
-					Path newFile = parent.resolve(fileName);
+					Path newFile = normalizedParent.resolve(zipEntry.getName()).normalize();
+					if (!newFile.startsWith(normalizedParent)) {
+						throw new IOException("Zip entry escapes target directory: "
+								+ zipEntry.getName());
+					}
 					if (zipEntry.isDirectory()) {
 						Files.createDirectories(newFile);
 					}
 					else {
-						Files.copy(zis, newFile);
+						Files.createDirectories(newFile.getParent());
+						Files.copy(zis, newFile, StandardCopyOption.REPLACE_EXISTING);
 					}
 					zipEntry = zis.getNextEntry();
 				}
-				zis.closeEntry();
-				zis.close();
 
 				Files.deleteIfExists(downloadedFile);
 			}
