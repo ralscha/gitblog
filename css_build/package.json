@@ -13,7 +13,7 @@
     "prismjs": "1.30.0"
   },
   "devDependencies": {
-    "bread-compressor-cli": "4.1.0",
+    "bread-compressor-cli": "4.1.1",
     "clean-css-cli": "5.6.3",
     "shx": "0.4.0"
   }
